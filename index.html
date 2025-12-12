@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering Abang Rico | Ayam Geprek Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #800000; /* Merah Marun */
+            --accent: #D4AF37; /* Emas */
+            --dark: #1a1a1a;
+            --light: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        /* Navbar */
+        nav {
+            background: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero span { color: var(--accent); }
+
+        .btn-cta {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-cta:hover {
+            background: transparent;
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 4rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: rgb(255, 255, 255);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .card-body { padding: 1.5rem; }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .btn-add {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover { background: var(--accent); color: var(--dark); }
+
+        /* Shopping Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            z-index: 2000;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-modal.active { right: 0; }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 10px;
+        }
+
+        .cart-total {
+            margin-top: auto;
+            border-top: 2px solid var(--primary);
+            padding-top: 1rem;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">Abang Rico</div>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag"></i>
+            <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Pedasnya Juara,<br><span>Rasanya Istimewa</span></h1>
+            <p>Spesialis Ayam Geprek & Catering Harian</p>
+            <br>
+            <a href="#menu" class="btn-cta">Pesan Sekarang</a>
+        </div>
+    </header>
+
+    <section id="menu" class="menu-section">
+        
+        <div class="section-title">
+            <h2>Ayam Geprek</h2>
+            <p>Pilih tingkat kepedasanmu!</p>
+        </div>
+        <div class="menu-grid" id="food-container">
+            </div>
+
+        <div class="section-title">
+            <h2>Minuman Segar</h2>
+        </div>
+        <div class="menu-grid" id="drink-container"></div>
+
+        <div class="section-title">
+            <h2>Cemilan</h2>
+        </div>
+        <div class="menu-grid" id="snack-container"></div>
+
+    </section>
+
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>Keranjang Saya</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align:center; color:#888;">Keranjang masih kosong.</p>
+        </div>
+        <div class="cart-total">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.2rem;">
+                <span>Total:</span>
+                <span id="totalPrice">Rp 0</span>
+            </div>
+            <button class="btn-whatsapp" onclick="checkoutWA()">
+                <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Catering Abang Rico. Dibuat dengan sepenuh hati.</p>
+    </footer>
+
+    <script>
+        // --- DATA MENU ---
+        const products = [
+            // Makanan
+            { id: 1, name: "Paket Geprek Original", price: 15000, category: "food", img: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800" },
+            { id: 2, name: "Paket Geprek Mozarella", price: 22000, category: "food", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800" },
+            { id: 3, name: "Paket Geprek Sambal Matah", price: 18000, category: "food", img: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=800" },
+            
+            // Minuman
+            { id: 4, name: "Es Teh Manis Jumbo", price: 5000, category: "drink", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=800" },
+            { id: 5, name: "Es Jeruk Peras", price: 8000, category: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=800" },
+            { id: 6, name: "Es Teler", price: 8000, category: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=800" },
+            { id: 7, name: "Es Coconut", price: 8000, category: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=800" },
+            { id: 8, name: "Es Jeruk Peras", price: 8000, category: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=800" },
+            { id: 9, name: "Es Teler", price: 8000, category: "drink", img: "https://images.unsplash.com/photo-1613478223719-2ab802602423?w=800" },
+            // Cemilan
+            { id: 8, name: "Jamur Crispy", price: 10000, category: "snack", img: "https://images.unsplash.com/photo-1625938144755-652e08e359b7?w=800" },
+            { id: 9, name: "Kulit Ayam Crispy", price: 12000, category: "snack", img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=800" }
+        ];
+
+        let cart = [];
+
+        // --- RENDER MENU ---
+        function renderMenu() {
+            products.forEach(product => {
+                const card = `
+                    <div class="card">
+                        <img src="${product.img}" alt="${product.name}">
+                        <div class="card-body">
+                            <h3 class="card-title">${product.name}</h3>
+                            <span class="card-price">Rp ${product.price.toLocaleString('id-ID')}</span>
+                            <button class="btn-add" onclick="addToCart(${product.id})">
+                                <i class="fas fa-cart-plus"></i> Masuk Keranjang
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                if(product.category === 'food') document.getElementById('food-container').innerHTML += card;
+                if(product.category === 'drink') document.getElementById('drink-container').innerHTML += card;
+                if(product.category === 'snack') document.getElementById('snack-container').innerHTML += card;
+            });
+        }
+
+        // --- FUNGSI KERANJANG ---
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            const existingItem = cart.find(c => c.id === id);
+
+            if(existingItem) {
+                existingItem.qty++;
+            } else {
+                cart.push({ ...item, qty: 1 });
+            }
+            
+            updateCartUI();
+            toggleCart(true); // Buka keranjang saat add item
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const totalPriceEl = document.getElementById('totalPrice');
+            
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            if(cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">Keranjang kosong.</p>';
+            }
+
+            cart.forEach((item, index) => {
+                total += item.price * item.qty;
+                count += item.qty;
+
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <small>Rp ${item.price.toLocaleString('id-ID')} x ${item.qty}</small>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span style="font-weight:bold;">Rp ${(item.price * item.qty).toLocaleString('id-ID')}</span>
+                            <i class="fas fa-trash" style="color:red; cursor:pointer;" onclick="removeItem(${index})"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartCount.innerText = count;
+            totalPriceEl.innerText = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCart(forceOpen = false) {
+            const modal = document.getElementById('cartModal');
+            if(forceOpen) {
+                modal.classList.add('active');
+            } else {
+                modal.classList.toggle('active');
+            }
+        }
+
+        // --- CHECKOUT WHATSAPP ---
+        function checkoutWA() {
+            if(cart.length === 0) {
+                alert("Keranjang masih kosong, Bang!");
+                return;
+            }
+
+            // GANTI NOMOR WA DISINI (Format: 628...)
+            const phoneNumber = "+6285211917671"; 
+            
+            let message = "Halo Abang Rico, saya mau pesan catering:\n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                message += `- ${item.name} (${item.qty}x) : Rp ${subtotal.toLocaleString('id-ID')}\n`;
+                total += subtotal;
+            });
+
+            message += `\n*Total Bayar: Rp ${total.toLocaleString('id-ID')}*`;
+            message += `\n\nMohon diproses ya, terima kasih!`;
+
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+        }
+
+        // Jalankan saat load
+        renderMenu();
+    </script>
+</body>
+</html>
